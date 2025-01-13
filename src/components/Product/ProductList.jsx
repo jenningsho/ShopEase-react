@@ -12,24 +12,34 @@ const ProductList = () => {
 
     const addToCart = (product) => {
 
-        
-        console.log(`Bouton ajouter au panier déclenchée`)
-        const isAdded = products.some( (prod) => prod.id === product.id);
-        console.log(isAdded);
-        
-        if(isAdded){
-            const updateCart = [...products, product];
-            setCart(updateCart);
+        // Vérifie si le produit existe dans le panier
+        const existingProduct = cart.some( (item) => item.id === product.id);
 
+        if(existingProduct) {
+            // si le produit existe, on met à jour la quantité
+            const updatedCart = cart.map( (item) => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item );
+
+            setCart(updatedCart);
+        } else {
+            // sinon on ajoute le produit avec une quantité à 1
+            setCart( [...cart, {...product, quantity: 1}]);
         }
-
     };
 
+     // on charge le panier depuis le localstorage
+    useEffect( () => {
+        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+        setCart(storedCart);
+    }, [] );
+
+    // on met à jour le localstorage quand le panier change
     useEffect( () => {
         if(cart.length > 0 ){
             localStorage.setItem("cart", JSON.stringify(cart));
         }
     }, [cart]);
+
+
 
     useEffect( () => {
         getProductList()
