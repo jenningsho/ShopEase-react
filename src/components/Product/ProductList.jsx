@@ -84,7 +84,8 @@ const ProductList = () => {
                         /> */}
                         <p><button 
                                 className="addToCart" 
-                                onClick={() => addToCart(product)}>Ajouter au panier</button></p>
+                                onClick={() => addToCart(product)}>Ajouter au panier</button>
+                                </p>
                     </div>
 
                             
