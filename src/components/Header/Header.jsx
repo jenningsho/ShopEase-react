@@ -1,43 +1,44 @@
 import { Link } from "react-router-dom";
 import "./Header.css";
+import CategoryPicker from "../CategoryPicker/CategoryPicker";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
 
 const Header = () =>{
+    const [cart, setCart] = useState([]);
+
+    // on charge le panier depuis le localstorage
+    useEffect( () => {
+        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+        setCart(storedCart);
+    }, [] );
+
+    const totalQuantity = cart.reduce( (accum, item) => accum + item.quantity,0);
+
 
     return(
 
-        <header className="header">
+        <div className="header">
                 <nav className="navbar navbar-expand-lg">
                     <div className="collapse navbar-collapse">
-                        <ul className="navbar-nav">
-                            <li className="nav-item">
-                                <Link to="/" className="a">Home</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link to="/" className="a">Decorations</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link to="/" className="a">High-Tech</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link to="/" className="a">Sacs</Link>
-                            </li>
-                        </ul>
+                        <CategoryPicker/>
                     </div>
-                <Link className="header-center">ShopEase Store</Link>
+                <Link to="/" className="header-center">ShopEase Store</Link>
                 </nav>
                 <div className="header-right">
                     <form className="d-flex mx-3" role="search">
-                        <input className="form-control" type="search" placeholder="Search" aria-label="Search"/>
+                        <input className="form-control" type="search" placeholder="Tapez un nom de produit, catégorie, ..." aria-label="Search"/>
                         <button className="btn btn-outline-success" type="submit">Search</button>
                     </form>
-                    <div className="cart-class">
-                        <Link to="/" className="cart-link">Panier</Link>  
+                    <div className="shopping-cart">
+                        <Link to="/cart" className="cart-link ">
+                        <FontAwesomeIcon icon="fa-solid fa-cart-shopping" />
+                                <span className="badge fw-bolder text-black">{totalQuantity}</span>
+                        </Link>  
                     </div>
                 </div>
-                
-        </header>
+        </div>
     )
 }
-
 export default Header;
 
