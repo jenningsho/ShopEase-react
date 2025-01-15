@@ -12,14 +12,11 @@ const CategoryPicker = () => {
 
    // Gérer l'affichage du menu au survol
     const handleMouseEnter = () => {
-    console.log("Mouse entered: Opening dropdown");
-    setIsDropdownOpen(true);
-};
-
-const handleMouseLeave = () => {
-    console.log("Mouse left: Closing dropdown");
-    setIsDropdownOpen(false);
-};
+        setIsDropdownOpen(true);
+    };
+    const handleMouseLeave = () => {
+        setIsDropdownOpen(false);
+    };
     
 
     // Chargement des catégories avec l'API

@@ -36,7 +36,7 @@ const ProductList = () => {
         }, 3000)
     };
 
-     // on charge le panier depuis le localstorage
+    // on charge le panier depuis le localstorage
     useEffect( () => {
         const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
         setCart(storedCart);

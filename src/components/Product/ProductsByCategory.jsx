@@ -7,12 +7,13 @@ import { calculateTTC } from "../../utils/price";
 
 
 const ProductsByCategory = () => {
+    const { id } = useParams(); // recupere id de la catégorie depuis l'url
     const[ products, setProducts] = useState([]);
     const[ error, setError] = useState(null);
+    
     const [ cart, setCart ] = useState([]);
     const [ flashMessage, setFlashmessage] = useState("");
 
-    const { id } = useParams();
 
     // Fonction pour ajouter un produit au panier
     const addToCart = (product) => {
@@ -37,16 +38,30 @@ const ProductsByCategory = () => {
         }, 3000)
     };
 
+    // on charge le panier depuis le localstorage
+    useEffect( () => {
+        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+        setCart(storedCart);
+    }, [] );
+
+     // on met a jour le localstorage quand le panier change
+    useEffect( () => {
+        if(cart.length > 0 ){
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
+    }, [cart]);
+
+    // Récupere les liens des produits associé avec l'id de la catégorie
     useEffect( () => {
         getProductsByCategory(id)
-            .then( response => {
-                console.log("Api reponse: ",response.data);
-                setProducts(response.data.member);
+            .then( (detailedProduct) => {
+                setProducts(detailedProduct); 
             })
-            .catch( err => {
-                setError(err.message);
+            .catch( (err) => {
+                setError(err.message) 
             })
-        }, [id]);
+    }, [id])
+
 
     if(error){
         return <div>Erreur: {error}</div>;
@@ -60,7 +75,7 @@ const ProductsByCategory = () => {
         <div className="products-by-category-container">
             {flashMessage && <div className="flash-message">{flashMessage}</div>}
 
-            <h1 className="text-center my-3">Produits du moment</h1>
+            <h1 className="text-center my-3">Produit de la catégorie</h1>
             <div className="products-list">
 
                 {products.map( (product) => (
