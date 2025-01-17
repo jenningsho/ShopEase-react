@@ -13,3 +13,9 @@ export const getProductList = () => apiShopEase.get('/produits/');
  * @returns {Promise}
  */
 export const getProductsByCategory = ( categoryId ) => apiShopEase.get(`/produits/by-categorie/${categoryId}`);
+
+
+// recherche de produits par mot clé
+export const searchProducts = (query) => {
+    return apiShopEase.get(`search/product?query=${query}`)
+};

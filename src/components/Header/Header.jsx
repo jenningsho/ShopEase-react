@@ -3,17 +3,17 @@ import "./Header.css";
 import CategoryPicker from "../CategoryPicker/CategoryPicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import { getCart, totalQuantity } from "../../utils/cart";
 
 const Header = () =>{
     const [cart, setCart] = useState([]);
 
     // on charge le panier depuis le localstorage
     useEffect( () => {
-        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+        const storedCart = getCart();
         setCart(storedCart);
     }, [] );
 
-    const totalQuantity = cart.reduce( (accum, item) => accum + item.quantity,0);
 
 
     return(
@@ -33,7 +33,7 @@ const Header = () =>{
                     <div className="shopping-cart">
                         <Link to="/cart" className="cart-link ">
                         <FontAwesomeIcon icon="fa-solid fa-cart-shopping" />
-                                <span className="badge fw-bolder text-black">{totalQuantity}</span>
+                                <span className="badge fw-bolder text-black">{totalQuantity(cart)}</span>
                         </Link>  
                     </div>
                 </div>

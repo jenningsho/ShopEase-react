@@ -3,8 +3,16 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center; */
-  background-color: #eaeded;
+  /* background-color: #eaeded; */
+  background-color: #efefef;
   min-height: 100vh;
+  font-family: "customFont", sans-serif;
+}
+
+@font-face {
+  font-family: "customFont";
+  src: url(./fonts/Montserrat-VariableFont_wght.ttf);
+  font-weight: normal;
 }
 
 .logo {
