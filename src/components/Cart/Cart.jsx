@@ -55,7 +55,8 @@ const Cart = () => {
                                         className="fontawesome-icon" 
                                         icon="fa-solid fa-trash" 
                                         onClick={ () => handleDecreaseQuantity(product)}/>
-                                    {product.quantity}
+                                        <span>{product.quantity}</span>
+                                
                                     <FontAwesomeIcon
                                         className="fontawesome-icon" 
                                         icon="fa-solid fa-plus" 
