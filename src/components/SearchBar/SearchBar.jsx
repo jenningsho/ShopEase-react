@@ -5,7 +5,6 @@ const SearchBar = ( {onSearch} ) => {
     const [searchQuery, setSearchQuery] = useState("");
 
     const handleInputOnChange = (event) => {
-
         const query = event.target.value || "";
         setSearchQuery(query);
     }
@@ -29,10 +28,9 @@ const SearchBar = ( {onSearch} ) => {
             <input  className="form-control" 
                     type="search" 
                     placeholder="Tapez un nom de produit, catégorie, ..." 
-                    aria-label="Search"
                     value={searchQuery}
                     onChange={handleInputOnChange}/>
-            <button className="btn btn-outline-success" type="submit">Search</button>
+            <button className="btn btn-outline-success" type="submit">Rechercher</button>
     </form>
     )
 }

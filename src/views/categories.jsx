@@ -1,13 +1,11 @@
-
-import Header from "../components/Header/Header";
 import ProductsByCategory from "../components/Product/ProductsByCategory";
 
-const ProductsByCategoryPage = () => {
+const ProductsByCategoryPage = ({searchQuery}) => {
+    
     return (
         <div>
-            <Header/>
             <div className="productsByCategory-component-container">
-            <ProductsByCategory/>
+                <ProductsByCategory searchQuery={searchQuery}/>
             </div>
         </div>
     )

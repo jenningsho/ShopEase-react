@@ -1,15 +1,12 @@
 
-import Header from "../components/Header/Header";
 import ProductList from "../components/Product/ProductList";
-// import SkeletonTest from "../components/Skeleton/SkeletonTest";
 
-const Home = () => {
+const Home = ({searchQuery}) => {
+
     return (
         <div>
-            {/* <SkeletonTest/> */}
-            <Header/>
             <div className="product-component-container">
-            <ProductList/>
+                <ProductList searchQuery={searchQuery}/>
             </div>
         </div>
     )

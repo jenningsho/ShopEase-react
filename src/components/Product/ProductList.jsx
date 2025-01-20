@@ -14,13 +14,14 @@ import { API_BASE_URL } from "../../constants/config";
 import { calculateTTC } from "../../utils/price";
 import { truncateText } from "../../utils/truncateText";
 import { addToCart, getCart } from "../../utils/cart";
+import { useFilteredProducts} from "../../utils/useFilteredProducts";
 
 // import du placeholder loading content
 import Skeleton from "react-loading-skeleton"; 
 import "react-loading-skeleton/dist/skeleton.css";
 
 
-const ProductList = () => {
+const ProductList = ( {searchQuery}) => {
     const [products, setProducts] = useState([]);
     const [error, setError] = useState(null);
     const [cart, setCart] = useState([]);
@@ -47,10 +48,16 @@ const ProductList = () => {
         });
     }, [])
 
-    
+    // hook pour filtrer les produits
+    const filteredProducts = useFilteredProducts(products, searchQuery);
 
+    
     if (error) {
         return <div>Erreur: {error}</div>;
+    }
+
+    if(!filteredProducts || filteredProducts.length === 0){
+        return <p>Aucun produits ne correspond à votre recherche.</p>
     }
 
     return (
@@ -74,7 +81,7 @@ const ProductList = () => {
                                 </div>
                             ))
                         : // Affichage des produits une fois chargés
-                        products.map((product) => (
+                        filteredProducts.map((product) => (
                             <div key={product.id} className="card">
                                 <Link to={`produits/${product.id}`}>
                                     <img

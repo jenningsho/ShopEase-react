@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { getProductsByCategory } from "../../services/product";
 
 
-import { Link, useParams } from "react-router-dom";
+import { data, Link, useParams } from "react-router-dom";
 
 // Import du style du composant ProductsByCategory
 import "./ProductsByCategory.css"
@@ -16,13 +16,14 @@ import { API_BASE_URL } from "../../constants/config";
 import { truncateText } from "../../utils/truncateText";
 import { calculateTTC } from "../../utils/price";
 import { addToCart, getCart } from "../../utils/cart";
+import { useFilteredProducts} from "../../utils/useFilteredProducts";
 
 // import du placeholder loading content
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 
-const ProductsByCategory = () => {
+const ProductsByCategory = ( {searchQuery}) => {
     const { id } = useParams(); // recupere id de la catégorie depuis l'url
     const[ products, setProducts] = useState([]);
     const[ error, setError] = useState(null);
@@ -49,6 +50,8 @@ const ProductsByCategory = () => {
             })
     }, [id])
 
+    const filteredProducts = useFilteredProducts(products, searchQuery);
+
     if(error){
         return <div>Erreur: {error}</div>;
     }
@@ -73,7 +76,7 @@ const ProductsByCategory = () => {
                         </div>
                     ))
             ) : 
-            products.map( (product) => (
+            filteredProducts.map( (product) => (
                 <div key={product.id} className="card">
                     <Link to={`produits/${product.id}`}>
                     <img src={`${API_BASE_URL}/uploads/${product.image}`} alt={product.nom}  className="product-image" loading="lazy"/>
