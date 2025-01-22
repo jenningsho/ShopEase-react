@@ -12,6 +12,8 @@ import CartPage from './views/CartPage';
 import ProductsByCategoryPage from './views/categories';
 import Header from './components/Header/Header';
 import { useState } from 'react';
+import RegisterPage from './views/RegisterPage';
+
 
 
 function App() {
@@ -32,6 +34,7 @@ function App() {
             <Route path="/" element={<Home searchQuery={searchQuery}/>}></Route>
             <Route path="/cart" element={<CartPage/>}></Route>
             <Route path="/categories/:id" element={<ProductsByCategoryPage searchQuery={searchQuery}/>}/>
+            
           </Routes>
       </BrowserRouter>
 

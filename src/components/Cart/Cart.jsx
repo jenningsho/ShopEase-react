@@ -1,11 +1,11 @@
-import { API_BASE_URL } from "../../constants/config";
+import { API_BASE_URL, WITH_API_BASE_URL } from "../../constants/config";
 import "./Cart.css";
 import { calculateTTC, totalPriceWt } from "../../utils/price";
 import { Link} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, clearCart, removeFromCart } from "../../store/cartSlice";
-
+import { validerCommande } from "../../services/validerCommande";
 
 const Cart = () => {
     const cart = useSelector( (state) => state.cart.items); // accede aux produits du panier
@@ -15,6 +15,28 @@ const Cart = () => {
         Votre panier est vide.
     </div>;
 
+    const handleValidateCart = async () => {
+        try {
+            // prépare les données de la commande
+            const commande = {
+                utilisateur : `api/utilisateurs/${userId}`,
+                statut: 'en attente',
+                commandeProduits: cart.map( (item) => ({
+                    produit: `api/produits/${item.id}`,
+                    quantite: item.quantity,
+                    prixUnitaire: item.prix
+                })),
+            };
+
+            // envoyer la commande vers l'API
+            const response = await WITH_API_BASE_URL.validerCommande(commande);
+                alert(`Commande validée avec succes. ID:${response.id}`);
+        } catch(error){
+            console.error('Erreur lors de la validation de la commande :', error.response?.data || error.message);
+
+            alert(`Erreur lors de la validation de la commande.`);
+        }
+    }
 
     return(
             <div className="cart-product-list">
@@ -67,7 +89,10 @@ const Cart = () => {
                         <div key={product.id} className="totalPrice-content fs-5 ">
                             Sous total :
                             <span className="fw-bolder"> { totalPriceWt(cart)} €</span>
-                                <Link to="" className="LinkTo">Passer la commande</Link>
+                                <Link
+                                    to="/order"
+                                    className="LinkTo"
+                                    onClick={handleValidateCart}>Valider la commande</Link>
                         </div>
                     ))}
             </div>
