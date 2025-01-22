@@ -23,6 +23,7 @@ export default [
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
     },
+    extends: [ "eslint:all", "plugin:react/all"],
     rules: {
       ...js.configs.recommended.rules,
       ...react.configs.recommended.rules,

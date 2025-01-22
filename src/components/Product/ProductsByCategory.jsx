@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { getProductsByCategory } from "../../services/product";
 
 
-import { data, Link, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 // Import du style du composant ProductsByCategory
 import "./ProductsByCategory.css"
@@ -15,41 +15,44 @@ import { API_BASE_URL } from "../../constants/config";
 // Import fonctions de calcul et tronquage , getCart
 import { truncateText } from "../../utils/truncateText";
 import { calculateTTC } from "../../utils/price";
-import { addToCart, getCart } from "../../utils/cart";
 import { useFilteredProducts} from "../../utils/useFilteredProducts";
 
 // import du placeholder loading content
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../store/cartSlice";
+import FlashMessage from "../FlashMessage/FlashMessage";
 
 
 const ProductsByCategory = ( {searchQuery}) => {
     const { id } = useParams(); // recupere id de la catégorie depuis l'url
     const[ products, setProducts] = useState([]);
     const[ error, setError] = useState(null);
-    
-    const [ cart, setCart ] = useState([]);
-    const [ flashMessage, setFlashmessage] = useState("");
     const [ loading, setLoading ] = useState(true);
+    const [ flashMessage, setFlashMessage] = useState("");
 
-    useEffect( () => {
-        const storedCart = getCart();
-        setCart(storedCart);
-    }, [] );
+    const dispatch = useDispatch();
+
+    const handleAddToCart = (product) =>{
+        dispatch(addToCart(product));
+        setFlashMessage(`${product.nom} a été ajouté au panier`);
+    }
 
     // Récupere les liens des produits associé avec l'id de la catégorie
     useEffect( () => {
         getProductsByCategory(id)
             .then( (response) => {
-                setProducts(response.data);
-                setLoading(false);
+                setProducts(response.data); // met a jour les produits
+                setLoading(false); // arrete le chargement
             })
             .catch( (err) => {
-                setError(err.message) 
+                setError(err.message) // stock les erreurs
                 setLoading(false);
             })
     }, [id])
 
+    // Filtre les produits en fonction de la recherche
     const filteredProducts = useFilteredProducts(products, searchQuery);
 
     if(error){
@@ -58,8 +61,10 @@ const ProductsByCategory = ( {searchQuery}) => {
 
     return(
         <div className="products-by-category-container">
-            {flashMessage && <div className="flash-message">{flashMessage}</div>}
-
+            <FlashMessage
+                message = {flashMessage}
+                duration= { 2000}
+                onClose = { () => setFlashMessage()}/>
             <h1 className="text-center my-3">Produit de la catégorie</h1>
             <div className="products-by-category-list">
             { loading ? (
@@ -88,7 +93,7 @@ const ProductsByCategory = ( {searchQuery}) => {
                     </div>
                     <p><button 
                             className="addToCart" 
-                            onClick={() => addToCart(product, cart, setCart, setFlashmessage)}>Ajouter au panier</button>
+                            onClick={() => handleAddToCart(product)}>Ajouter au panier</button>
                             </p>
                 </div>
             ))}

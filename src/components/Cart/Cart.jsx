@@ -1,40 +1,34 @@
-import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../../constants/config";
 import "./Cart.css";
 import { calculateTTC, totalPriceWt } from "../../utils/price";
 import { Link} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { addToCart, getCart, removeFromCart } from "../../utils/cart";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, clearCart, removeFromCart } from "../../store/cartSlice";
 
 
 const Cart = () => {
-    const[cart, setCart ] = useState([]);
-
-    // Chargement du panier au chargement du composant
-    useEffect( () => {
-        const storedCart = getCart();
-        setCart(storedCart);
-    }, []);
-
-    // Ajout de quantité pour un produit
-    const handleIncreaseQuantity = (product) => {
-        console.log("produit ajouté");
-        addToCart(product, cart, setCart);
-    }
-
-    const handleDecreaseQuantity = (product) => {
-        console.log("produit supprimé");
-        removeFromCart(product, cart, setCart);
-    }
+    const cart = useSelector( (state) => state.cart.items); // accede aux produits du panier
+    const dispatch = useDispatch();
 
     if(cart.length === 0) return <div className="text-center text-black fs-2">
         Votre panier est vide.
     </div>;
 
+
     return(
             <div className="cart-product-list">
                 <div className="row-cart">
                     <h1>Mon panier</h1>
+                        <button
+                            className="clear-cart-button"
+                            onClick={ () => { 
+                                if(window.confirm("Voulez vous vraiment vider le panier")) {
+                                    dispatch(clearCart());
+                                }
+                            }}>
+                                Vider le panier
+                        </button>
                     <div className="price-info">
                         Prix
                     </div>
@@ -54,13 +48,13 @@ const Cart = () => {
                                     <FontAwesomeIcon
                                         className="fontawesome-icon" 
                                         icon="fa-solid fa-trash" 
-                                        onClick={ () => handleDecreaseQuantity(product)}/>
+                                        onClick={ () => dispatch(removeFromCart(product))}/>
                                         <span>{product.quantity}</span>
                                 
                                     <FontAwesomeIcon
                                         className="fontawesome-icon" 
                                         icon="fa-solid fa-plus" 
-                                        onClick={ () => handleIncreaseQuantity(product)}/>
+                                        onClick={ () => dispatch(addToCart(product))}/>
                                 </div>
                             </div>
 

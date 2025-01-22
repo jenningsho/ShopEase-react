@@ -2,18 +2,15 @@ import { Link } from "react-router-dom";
 import "./Header.css";
 import CategoryPicker from "../CategoryPicker/CategoryPicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
-import { getCart, totalQuantity } from "../../utils/cart";
+import { totalQuantity } from "../../utils/totalQuantity";
 import SearchBar from "../SearchBar/SearchBar";
+import { useSelector } from "react-redux";
 
 const Header = ( {onSearch} ) =>{
-    const [cart, setCart] = useState([]);
 
-    // on charge le panier depuis le localstorage
-    useEffect( () => {
-        const storedCart = getCart();
-        setCart(storedCart);
-    }, [] );
+    // accede au produit du panier via Redux
+    const cart = useSelector( (state) => state.cart.items);
+
 
     return(
 

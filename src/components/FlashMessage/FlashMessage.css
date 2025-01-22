@@ -1,0 +1,16 @@
+
+/* Flash message*/
+.flash-message {
+    position: fixed;
+    top: 46px;
+    right: 42px;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    animation: fadeInOut 3s ease-in-out;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}

@@ -13,26 +13,31 @@ import { API_BASE_URL } from "../../constants/config";
 // Import fonctions de calcul et tronquage , getCart
 import { calculateTTC } from "../../utils/price";
 import { truncateText } from "../../utils/truncateText";
-import { addToCart, getCart } from "../../utils/cart";
 import { useFilteredProducts} from "../../utils/useFilteredProducts";
 
 // import du placeholder loading content
 import Skeleton from "react-loading-skeleton"; 
 import "react-loading-skeleton/dist/skeleton.css";
 
+// Import Redux
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../store/cartSlice";
+import FlashMessage from "../FlashMessage/FlashMessage";
+
 
 const ProductList = ( {searchQuery}) => {
     const [products, setProducts] = useState([]);
-    const [error, setError] = useState(null);
-    const [cart, setCart] = useState([]);
-    const [flashMessage, setFlashMessage] = useState("");
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [flashMessage, setFlashMessage ] = useState("");
 
-    // Chargement initial du panier depuis le localstorage lors du montage du composant
-    useEffect(() => {
-        const storedCart = getCart();
-        setCart(storedCart);
-    }, []);
+    // Hook useDispatch 
+    const dispatch = useDispatch();
+
+    const handleAddToCart = (product) =>{
+        dispatch(addToCart(product));
+        setFlashMessage(`${product.nom} a été ajouté au panier`);
+    }
 
     // Récupération des produits depuis l'API
     useEffect( () => {
@@ -46,24 +51,23 @@ const ProductList = ( {searchQuery}) => {
             setError(err.message); // Stocke les erreurs
             setLoading(false); 
         });
-    }, [])
+    }, []);
 
     // hook pour filtrer les produits
     const filteredProducts = useFilteredProducts(products, searchQuery);
 
-    
+
     if (error) {
         return <div>Erreur: {error}</div>;
     }
 
-    if(!filteredProducts || filteredProducts.length === 0){
-        return <p>Aucun produits ne correspond à votre recherche.</p>
-    }
 
     return (
         <div className="productList-container">
-            {flashMessage && <div className="flash-message">{flashMessage}</div>}
-
+            <FlashMessage
+                message = {flashMessage}
+                duration= { 2000}
+                onClose = { () => setFlashMessage()}/>
             <h1 className="text-center my-3">Produits du moment</h1>
             <div className="products-list">
                 {loading
@@ -96,7 +100,7 @@ const ProductList = ( {searchQuery}) => {
                                     <p className="fw-bolder">Prix TTC : {calculateTTC(product.prix)} €</p>
                                 </div>
                                 <p>
-                                    <button className="addToCart" onClick={() => addToCart(product, cart, setCart, setFlashMessage)}>
+                                    <button className="addToCart" onClick={() => handleAddToCart(product)}>
                                         Ajouter au panier
                                     </button>
                                 </p>
