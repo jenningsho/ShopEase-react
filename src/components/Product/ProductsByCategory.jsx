@@ -23,6 +23,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../store/cartSlice";
 import FlashMessage from "../FlashMessage/FlashMessage";
+import ErrorHandle from "../ErrorHandle/ErrorHandle";
+
 
 
 const ProductsByCategory = ( {searchQuery}) => {
@@ -47,7 +49,7 @@ const ProductsByCategory = ( {searchQuery}) => {
                 setLoading(false); // arrete le chargement
             })
             .catch( (err) => {
-                setError(err.message) // stock les erreurs
+                setError(err.response?.data?.error || 'Une erreur inconnue est survenue') // stock les erreurs
                 setLoading(false);
             })
     }, [id])
@@ -56,7 +58,7 @@ const ProductsByCategory = ( {searchQuery}) => {
     const filteredProducts = useFilteredProducts(products, searchQuery);
 
     if(error){
-        return <div>Erreur: {error}</div>;
+        return <ErrorHandle message={error}/>;
     }
 
     return(

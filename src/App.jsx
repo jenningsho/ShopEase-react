@@ -12,8 +12,7 @@ import CartPage from './views/CartPage';
 import ProductsByCategoryPage from './views/categories';
 import Header from './components/Header/Header';
 import { useState } from 'react';
-import RegisterPage from './views/RegisterPage';
-
+import ErrorHandle from './components/ErrorHandle/ErrorHandle';
 
 
 function App() {
@@ -25,6 +24,8 @@ function App() {
           setSearchQuery(query);
       }
 
+      const NotFound = () => <ErrorHandle message="Erreur 404 - La page demandé est introuvable."/>
+
   return (
 
       <BrowserRouter>
@@ -34,7 +35,7 @@ function App() {
             <Route path="/" element={<Home searchQuery={searchQuery}/>}></Route>
             <Route path="/cart" element={<CartPage/>}></Route>
             <Route path="/categories/:id" element={<ProductsByCategoryPage searchQuery={searchQuery}/>}/>
-            
+            <Route path="*" element={<NotFound/>}/>
           </Routes>
       </BrowserRouter>
 
