@@ -13,6 +13,7 @@ import ProductsByCategoryPage from './views/categories';
 import Header from './components/Header/Header';
 import { useState } from 'react';
 import ErrorHandle from './components/ErrorHandle/ErrorHandle';
+import ProductDetailPage from './views/ProductDetailPage';
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
             <Route path="/cart" element={<CartPage/>}></Route>
             <Route path="/categories/:id" element={<ProductsByCategoryPage searchQuery={searchQuery}/>}/>
             <Route path="*" element={<NotFound/>}/>
+            <Route path="/produits/:id" element={<ProductDetailPage/>}/>
           </Routes>
       </BrowserRouter>
 
