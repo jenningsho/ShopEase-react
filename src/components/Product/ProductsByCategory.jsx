@@ -31,7 +31,7 @@ const ProductsByCategory = ( {searchQuery}) => {
     const { id } = useParams(); // recupere id de la catégorie depuis l'url
     const[ products, setProducts] = useState([]);
     const[ error, setError] = useState(null);
-    const [ loading, setLoading ] = useState(true);
+    const [ loading, setLoading ] = useState(true); // etat local loading pour les lazy loading content
     const [ flashMessage, setFlashMessage] = useState("");
 
     const dispatch = useDispatch();

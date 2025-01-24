@@ -24,6 +24,7 @@ function App() {
           setSearchQuery(query);
       }
 
+      // Centraliser le message d'erreur
       const NotFound = () => <ErrorHandle message="Erreur 404 - La page demandé est introuvable."/>
 
   return (
